@@ -23,8 +23,13 @@ ADD . /work/libvineyard
 RUN cd /tmp && \
     curl -LJO https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64 && \
     chmod +x dumb-init_1.2.2_amd64 && \
+    curl -LJO https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && \
+    chmod +x wait-for-it.sh && \
     curl -LJO https://github.com/etcd-io/etcd/releases/download/v3.4.13/etcd-v3.4.13-linux-amd64.tar.gz && \
     tar zxvf etcd-v3.4.13-linux-amd64.tar.gz && \
+    curl -LJO https://dl.k8s.io/release/v1.19.0/bin/linux/amd64/kubectl && \
+    chmod +x kubectl && \
+    strip kubectl && \
     cd /work/libvineyard && \
     mkdir -p /work/libvineyard/build && \
     cd /work/libvineyard/build && \
@@ -62,7 +67,9 @@ RUN cd /tmp && \
 FROM frolvlad/alpine-glibc:alpine-3.12
 
 COPY --from=builder /tmp/dumb-init_1.2.2_amd64 /usr/bin/dumb-init
+COPY --from=builder /tmp/wait-for-it.sh /usr/bin/wait-for-it.sh
 COPY --from=builder /tmp/etcd-v3.4.13-linux-amd64/etcd /usr/bin/etcd
+COPY --from=builder /tmp/kubectl /usr/bin/kubectl
 COPY --from=builder /work/libvineyard/build/bin/vineyardd /usr/bin/vineyardd
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]

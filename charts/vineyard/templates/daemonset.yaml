@@ -17,29 +17,60 @@ spec:
       labels:
         {{- include "vineyard.selectorLabels" . | nindent 8 }}
     spec:
+      serviceAccountName: vineyard-server
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       tolerations:
-      # this toleration is to have the daemonset runnable on master nodes
-      # remove it if your masters can't run pods
-      - key: node-role.kubernetes.io/master
-        effect: NoSchedule
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      restartPolicy: {{ .Values.restartPolicy }}
       containers:
         - name: {{ .Chart.Name }}
           {{- if .Values.image.tag }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          {{- end }}
+          {{- else }}
           image: "{{ .Values.image.repository }}:v{{ default .Chart.AppVersion }}"
+          {{- end }}
+          {{- if .Values.image.pullPolicy }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args:
-          - /usr/bin/vineyardd
-          - "--etcd_endpoint"
-          - "http://etcd-for-vineyard.{{ .Release.Namespace }}.svc.cluster.local:2379"
+          {{- end }}
+          command:
+          - bash
+          - "-c"
+          - |
+            /usr/bin/wait-for-it.sh -t 60 etcd-for-vineyard.{{ .Release.Namespace }}.svc.cluster.local:2379;
+            sleep 1;
+            /usr/local/bin/vineyardd \
+              --sync_crds true \
           {{- if .Values.vineyard.sharedMemorySize }}
-          - "--size"
-          - "{{ .Values.vineyard.sharedMemorySize }}"
+              --size \
+              {{ .Values.vineyard.sharedMemorySize }} \
+          {{- end }}
+              --etcd_endpoint \
+              http://etcd-for-vineyard.{{ .Release.Namespace }}.svc.cluster.local:2379
+          env:
+            - name: MY_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          {{- with .Values.env }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           ports:
             - name: ipc
@@ -48,6 +79,7 @@ spec:
           livenessProbe:
             tcpSocket:
               port: 9600
+            periodSeconds: 60
           readinessProbe:
             exec:
               command:
@@ -64,7 +96,7 @@ spec:
       volumes:
       - name: run
         hostPath:
-          path: /var/run/vineyard
+          path: /var/run/vineyard-{{ .Release.Namespace }}
       - name: shm
         emptyDir:
           medium: Memory

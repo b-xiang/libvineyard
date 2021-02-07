@@ -27,6 +27,7 @@ limitations under the License.
 #include "server/async/ipc_server.h"
 #include "server/async/rpc_server.h"
 #include "server/services/meta_service.h"
+#include "server/util/kubectl.h"
 #include "server/util/meta_tree.h"
 #include "server/util/proc.h"
 
@@ -292,11 +293,24 @@ Status VineyardServer::CreateData(
 
 Status VineyardServer::Persist(const ObjectID id, callback_t<> callback) {
   ENSURE_VINEYARDD_READY();
+  auto self(shared_from_this());
   meta_service_ptr_->RequestToPersist(
-      [id](const Status& status, const json& meta,
-           std::vector<IMetaService::op_t>& ops) {
+      [self, id](const Status& status, const json& meta,
+                 std::vector<IMetaService::op_t>& ops) {
         if (status.ok()) {
-          return CATCH_JSON_ERROR(meta_tree::PersistOps(meta, id, ops));
+          auto status = CATCH_JSON_ERROR(meta_tree::PersistOps(meta, id, ops));
+          if (self->spec_["sync_crds"].get<bool>() && status.ok() &&
+              !ops.empty()) {
+            json tree;
+            VINEYARD_SUPPRESS(
+                CATCH_JSON_ERROR(meta_tree::GetData(meta, id, tree)));
+            if (tree.is_object() && !tree.empty()) {
+              auto kube = std::make_shared<Kubectl>(self->GetIOContext());
+              kube->ApplyObject(meta["instances"], tree);
+              kube->Finish();
+            }
+          }
+          return status;
         } else {
           LOG(ERROR) << status.ToString();
           return status;

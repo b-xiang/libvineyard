@@ -20,6 +20,16 @@ import os
 
 from setuptools import setup, find_packages
 
+try:
+    from wheel.bdist_wheel import bdist_wheel
+    class force_bdist_wheel(bdist_wheel):
+        def finalize_options(self):
+            bdist_wheel.finalize_options(self)
+            self.root_is_pure = False
+except ImportError:
+    force_bdist_wheel = None
+
+
 repo_root = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -57,6 +67,7 @@ setup(
     },
     include_package_data=True,
     zip_safe=False,
+    cmdclass={'bdist_wheel': force_bdist_wheel},
     entry_points={},
     extras_require={
         'dev': [

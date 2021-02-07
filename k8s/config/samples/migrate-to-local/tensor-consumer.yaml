@@ -1,0 +1,85 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tensor-consumer
+  labels:
+    app: tensor-consumer
+spec:
+  replicas: 2
+  serviceName: tensor-consumer
+  selector:
+    matchLabels:
+      app: tensor-consumer
+  template:
+    metadata:
+      name: tensor-consumer
+      labels:
+        app: tensor-consumer
+        scheduling.k8s.v6d.io/job: tensor-consumer
+        scheduling.k8s.v6d.io/required: "o000401cfd43c6404"
+        scheduling.k8s.v6d.io/replica: "2"
+    spec:
+      schedulerName: vineyard-scheduler
+      containers:
+      - name: tensor-consumer
+        image: nginx
+        resources:
+          limits:
+            cpu: 300m
+            memory: 128Mi
+          requests:
+            cpu: 300m
+            memory: 128Mi
+        volumeMounts:
+        - mountPath: /tmp/vineyard
+          name: vineyard
+        - name: run
+          mountPath: /var/run
+        - name: shm
+          mountPath: /dev/shm
+      initContainers:
+      - name: vineyard-migration
+        image: registry-vpc.cn-hongkong.aliyuncs.com/libvineyard/vineyardd:ubuntu
+        imagePullPolicy: Always
+        command: ['sh', '-c']
+        env:
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MY_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: VINEYARD_IPC_SOCKET
+          value: /var/run/vineyard.sock
+        args:
+        # - tail -f
+        - python3 /usr/local/bin/vineyard-migrate-to-local 2 ${MY_POD_NAME##*-} "o000401cfd43c6404"
+        volumeMounts:
+        - mountPath: /tmp/vineyard
+          name: vineyard
+        - name: run
+          mountPath: /var/run
+        - name: shm
+          mountPath: /dev/shm
+
+      volumes:
+      - name: vineyard
+        emptyDir:
+          medium: Memory
+      - name: run
+        hostPath:
+          path: /var/run/vineyard-vineyard-system
+      - name: shm
+        emptyDir:
+          medium: Memory

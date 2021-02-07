@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: libvineyard/vineyardd
-  pullPolicy: IfNotPresent
+  repository: registry-vpc.cn-hongkong.aliyuncs.com/libvineyard/vineyardd
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: ubuntu
 
 imagePullSecrets: []
 nameOverride: ""
@@ -38,3 +38,13 @@ affinity: {}
 
 vineyard:
   sharedMemorySize: ""
+
+tolerations: {}
+  # this toleration is to have the daemonset runnable on master nodes
+  # remove it if your masters can't run pods.
+  # - key: node-role.kubernetes.io/master
+  #   effect: NoSchedule
+
+env:
+  - name: GLOG_v
+    value: "100"

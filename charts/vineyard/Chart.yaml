@@ -1,8 +1,22 @@
 apiVersion: v2
 name: vineyard
-description: Vineyard is an in-memory immutable data manager
+description: Vineyard is an in-memory immutable data manager.
 
 home: https://v6d.io
+
+sources:
+  - https://github.com/alibaba/libvineyard
+
+keywords:
+  - vineyard
+  - libvineyard
+  - distributed-systems
+  - distributed
+  - shared-memory
+  - graph-analytics
+  - in-memory-storage
+  - big-data-analytics
+  - distributed-computation
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -23,4 +37,3 @@ version: 0.1.10
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 appVersion: 0.1.10
-
