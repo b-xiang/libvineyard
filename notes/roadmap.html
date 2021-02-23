@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Roadmap &mdash; vineyard  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Troubleshooting" href="troubleshooting.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> vineyard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="divein.html">Diving into vineyard</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cpp_api.html">C++ API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API reference</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to vineyard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Roadmap</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v1-0-0">v1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-2-0">v0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-0">v0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#release-notes">Release Notes</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">vineyard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Roadmap</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/notes/roadmap.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="roadmap">
+<h1>Roadmap<a class="headerlink" href="#roadmap" title="Permalink to this headline">¶</a></h1>
+<p>Vineyard aims to serve as an open-source in-memory immutable data manager. The roadmap
+for major vineyard releases are listed as follows:</p>
+<div class="section" id="v1-0-0">
+<h2>v1.0.0<a class="headerlink" href="#v1-0-0" title="Permalink to this headline">¶</a></h2>
+<p>We plan to release <em>v1.0.0</em> after vineyard becomes a CNCF sandbox project. vineyard <em>v1.0.0</em>
+will be the first major stable releases with fully kubernetes support, which will include:</p>
+<ul class="simple">
+<li><p>Match the criterion of CNCF sandbox project.</p></li>
+<li><p>A stable CRD definition for <code class="docutils literal notranslate"><span class="pre">LocalObject</span></code> and <code class="docutils literal notranslate"><span class="pre">GlobalObject</span></code> to represents vineyard objects
+as kubernetes resources.</p></li>
+<li><p>A full-features scheduler plugin for kubernetes, as well as a custom controller that manages
+objects (custom resources) in vineyard cluster.</p></li>
+<li><p>A refined version of Helm integration.</p></li>
+</ul>
+</div>
+<div class="section" id="v0-2-0">
+<h2>v0.2.0<a class="headerlink" href="#v0-2-0" title="Permalink to this headline">¶</a></h2>
+<p>vineyard <em>v0.2.0</em> will address the issue about Python ecosystem compatibility, I/O, and
+the kubernetes integration.</p>
+<ul class="simple">
+<li><p>vineyard <em>v0.2.0</em> will support any <em>filesystem-spec</em>-compatible data source/sink as well as file
+format.</p></li>
+<li><p>vineyard <em>v0.2.0</em> will support Python ecosystem (especially numpy and pandas) better.</p></li>
+<li><p>vineyard <em>v0.2.0</em> will include basic Helm integration for deploying on Kubernetes as a <code class="docutils literal notranslate"><span class="pre">DaemonSet</span></code>.</p></li>
+<li><p>A prototype of scheduler plugin to do data locality scheduling will be included into vineyard v0.2.0
+to demonstrates the capability about co-scheduling job and data in kubernetes brought by vineyard.</p></li>
+</ul>
+</div>
+<div class="section" id="v0-1-0">
+<h2>v0.1.0<a class="headerlink" href="#v0-1-0" title="Permalink to this headline">¶</a></h2>
+<p>vineyard <em>v0.1.0</em> is the first release after open source. This version includes:</p>
+<ul class="simple">
+<li><p>Complete functionality for both server and client.</p></li>
+<li><p>Complete Python SDK.</p></li>
+<li><p>User-friendly package distribution on pypi (for python SDK) and on dockerhub (for vineyardd server).</p></li>
+</ul>
+</div>
+<div class="section" id="release-notes">
+<h2>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h2>
+<p>For more details about what changes happened for every version, please refer to
+our <a class="reference external" href="https://github.com/alibaba/libvineyard/releases">releases notes</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="troubleshooting.html" class="btn btn-neutral float-left" title="Troubleshooting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2019-2020, GRAPE Team, Damo Academy.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
